@@ -1,7 +1,10 @@
 import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useSession, signOut } from "next-auth/react";
+import { signOut, getSession, useSession} from "next-auth/react";
+import { useState } from "react";
+import router from "next/router";
+import Image from "next/image";
 
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
@@ -16,13 +19,31 @@ function classNames(...classes) {
 
 export default function Navbar() {
 
-  
-  const { data: session } = useSession();
+  const [session, setSession] = useState(null);
 
-  console.log(session);
+  const { status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push("/")
+    },
+  })
 
+  useEffect(() => {
+    getSession().then((result) => {
+      setSession(result);
+    });
+  }, []);
+
+
+  console.log(session, status)
+
+
+   if (session === null) {
+    return <div>Loading...</div>;
+    }
 
   return (
+
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
         <>
@@ -70,17 +91,15 @@ export default function Navbar() {
                 </button>
 
                 {/* Profile dropdown */}
+
                 <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src={session.user.image}
-                        alt=""
-                      />
+                      <Image className="h-8 w-8 rounded-full" src={session.user.image} width={500} height={500} alt=""></Image>
                     </Menu.Button>
                   </div>
+                  {session.user.email}
                   <Transition
                     as={Fragment}
                     enter="transition ease-out duration-100"
@@ -100,7 +119,7 @@ export default function Navbar() {
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
-                            Your Profile
+                            Profile
                           </a>
                         )}
                       </Menu.Item>
@@ -113,7 +132,7 @@ export default function Navbar() {
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
-                            Settings
+                            Paramètres
                           </a>
                         )}
                       </Menu.Item>
@@ -161,5 +180,8 @@ export default function Navbar() {
         </>
       )}
     </Disclosure>
+
+
+
   );
-}
+};

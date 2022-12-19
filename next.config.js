@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['brasserie-goudale.com', 'cloudflare-ipfs.com'],
+    domains: ['brasserie-goudale.com', 'cloudflare-ipfs.com', 'cdn.pixabay.com'],
   },
 }
 

@@ -8,15 +8,14 @@ import Navbar from "../components/Navbar";
 
 function Home() {
 
-
   return (
     <div className="">
+
       <Head>
         <title>Skywhireeb - Accueil</title>
       </Head>
 
-
-      {/* <Navbar/> */}
+      <Navbar/>
 
       <div className="w-full flex flex-wrap">
         <div className="w-full md:w-1/2 flex flex-col">
@@ -36,12 +35,12 @@ function Home() {
   );
 }
 
-export async function getServerSideProps(context) {
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-    },
-  }
-}
+// export async function getServerSideProps(context) {
+//   return {
+//     props: {
+//       csrfToken: await getCsrfToken(context),
+//     },
+//   }
+// }
 
 export default Home;

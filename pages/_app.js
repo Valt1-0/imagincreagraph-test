@@ -6,8 +6,22 @@ export default function App({
   pageProps: { session, ...pageProps },
 }) {
   return (
-    <SessionProvider session={pageProps.session}>
-      <Component {...pageProps} />
+    <SessionProvider session={session}>
+          <Component {...pageProps} />
     </SessionProvider>
   )
 }
+
+// Get average runtime of successful runs in seconds
+
+
+// function Auth({ children }) {
+//   // if `{ required: true }` is supplied, `status` can only be "loading" or "authenticated"
+//   const { status } = useSession({ required: true })
+
+//   if (status === "loading") {
+//     return <div>Loading...</div>
+//   }
+
+//   return children
+// }

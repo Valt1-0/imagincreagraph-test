@@ -26,6 +26,9 @@ const UsersSchema = new mongoose.Schema({
     type: String,
     default: faker.image.avatar(),
   },
+  test:{
+    type: String,
+  }
 
 })
 
