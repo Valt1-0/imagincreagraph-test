@@ -1,7 +1,7 @@
 import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { signOut, getSession, useSession} from "next-auth/react";
+import { signOut, getSession, useSession } from "next-auth/react";
 import { useState } from "react";
 import router from "next/router";
 import Image from "next/image";
@@ -18,15 +18,14 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
-
   const [session, setSession] = useState(null);
 
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/")
+      router.push("/");
     },
-  })
+  });
 
   useEffect(() => {
     getSession().then((result) => {
@@ -34,16 +33,13 @@ export default function Navbar() {
     });
   }, []);
 
+  console.log(session, status);
 
-  console.log(session, status)
-
-
-   if (session === null) {
+  if (session === null) {
     return <div>Loading...</div>;
-    }
+  }
 
   return (
-
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
         <>
@@ -96,7 +92,13 @@ export default function Navbar() {
                   <div>
                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open user menu</span>
-                      <Image className="h-8 w-8 rounded-full" src={session.user.image} width={500} height={500} alt=""></Image>
+                      <Image
+                        className="h-8 w-8 rounded-full"
+                        src={session.user.image}
+                        width={500}
+                        height={500}
+                        alt=""
+                      ></Image>
                     </Menu.Button>
                   </div>
                   {session.user.email}
@@ -180,8 +182,5 @@ export default function Navbar() {
         </>
       )}
     </Disclosure>
-
-
-
   );
-};
+}

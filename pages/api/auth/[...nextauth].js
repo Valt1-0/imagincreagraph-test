@@ -19,6 +19,7 @@ export default NextAuth({
       async authorize(credentials, req) {
         const email = credentials.email;
         const password = credentials.password;
+        const test = credentials.test;
 
         const user = await Users.findOne({ email });
 
@@ -26,16 +27,18 @@ export default NextAuth({
           throw new Error("Vous n'êtes pas encore inscrit");
         }
         if (user) {
-          return signInUser({ password, user });
+          return signInUser({ password, user});
         }
       },
     }),
     // ...add more providers here
   ],
   callbacks: {
-    async session({ session, token, user }) {
+    async session({ session, token}) {
       // Send properties to the client, like an access_token from a provider.
       session.accessToken = token.accessToken
+      console.log("SESSION " + JSON.stringify(session));
+      
       return session
     }
   },
@@ -49,7 +52,7 @@ export default NextAuth({
   database: process.env.MONGO_URI,
 });
 
-const signInUser = async ({ password, user }) => {
+const signInUser = async ({ password, user}) => {
   if (!password) {
     throw new Error("Veuillez saisir votre mot de passe");
   }

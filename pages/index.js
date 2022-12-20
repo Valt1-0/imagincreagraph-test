@@ -9,22 +9,15 @@ import router from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
+import chalk from "chalk";
 
-function Index() {
+function Index({csrfToken}) {
   const { data: session } = useSession();
 
   const { status } = useSession();
-  
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  // window is available, we can access localStorage
-  //     localStorage.setItem("session-info", JSON.stringify(session));
-  //   }
-  // }, [session]);
 
   console.log(session, status);
 
-  const [test, setTest] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,7 +26,7 @@ function Index() {
   const signInUser = async (e) => {
     e.preventDefault();
 
-    let options = { redirect: false, username, email, test, password };
+    let options = { redirect: false, username, email, password };
     const res = await signIn("credentials", options);
     setMessage(null);
     if (!res.error) {
@@ -43,8 +36,7 @@ function Index() {
       }, 3000);
     }
     if (
-      res.error == "Veuillez saisir un mot de passe" ||
-      "Vous n'êtes pas encore inscrit"
+      res.error == "Veuillez saisir un mot de passe" || "Vous n'êtes pas encore inscrit"
     ) {
       toast.info(res.error, { position: "top-right", autoClose: 5000, hideProgressBar: false, closeOnClick: true, progress: undefined, theme: "light" });
     }
@@ -77,7 +69,7 @@ function Index() {
               action="/api/auth/callback/credentials"
               className="flex flex-col items-center pt-3 md:pt-1"
             >
-              {/* <input name="csrfToken" type="hidden" defaultValue={csrfToken} /> */}
+              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
               <div className="flex flex-col pt-4">
                 <label htmlFor="email" className="text-lg">
                   Adresse mail
@@ -151,12 +143,13 @@ function Index() {
   );
 }
 
-// export async function getServerSideProps(context) {
-//   return {
-//     props: {
-//       csrfToken: await getCsrfToken(context),
-//     },
-//   };
-// }
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      csrfToken: await getCsrfToken(context),
+    },
+  };
+  
+}
 
 export default Index;
